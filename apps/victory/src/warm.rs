@@ -23,7 +23,10 @@ const SLOW_MS: f64 = 1000.0;
 
 fn folder() -> Result<PathBuf> {
     let cfg = victory_core::Config::load()?;
-    Ok(cfg.cache_subdir("shaders")?.with_file_name("pipelines"))
+    let dir = cfg.cache_subdir("shaders")?.with_file_name("pipelines");
+    // The recorder makes this folder during a run; `warm` comes first.
+    std::fs::create_dir_all(&dir).with_context(|| format!("creating {}", dir.display()))?;
+    Ok(dir)
 }
 
 fn select_pipelines(

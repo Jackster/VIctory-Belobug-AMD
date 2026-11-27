@@ -41,6 +41,33 @@ fn parse_fingerprint(stdout: &str) -> String {
     fp.to_owned()
 }
 
+/// `warm` may run on a cache no title run has written to: nothing has made
+/// `cache\pipelines` yet, so `warm` has to, and there is nothing to make.
+#[test]
+fn warm_creates_the_missing_pipelines_folder() {
+    let root = tempfile::tempdir().unwrap();
+    let cache = root.path().join("cache");
+    let pipelines = cache.join("pipelines");
+    assert!(!pipelines.exists(), "a fresh cache has no pipelines folder");
+
+    let first = run_warm(root.path(), &cache, &[], &["--limit", "0"]);
+    assert!(
+        first.contains("0 pipelines known, 0 made before") && first.contains("0 to make"),
+        "{first}"
+    );
+    assert!(
+        pipelines.is_dir(),
+        "warm creates the folder its files live in"
+    );
+    assert!(
+        pipelines.join("warm-done.txt").is_file(),
+        "and the book files it appends to"
+    );
+
+    let second = run_warm(root.path(), &cache, &[], &["--limit", "0", "--used"]);
+    assert!(second.contains("made before"), "{second}");
+}
+
 #[test]
 fn warm_bad_fingerprint_override_again_and_help() {
     let help = Command::new(env!("CARGO_BIN_EXE_victory"))

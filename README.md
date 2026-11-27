@@ -129,12 +129,17 @@ name, PCI vendor and device IDs, and dedicated VRAM. Set
 name to select it explicitly. With the launcher, pass
 `-More @{VICTORY_D3D12_ADAPTER='NVIDIA'}`.
 
-Before the first run, ahead of time (both can be stopped and go on later):
+Before a run, ahead of time (both can be stopped and go on later):
 
 ```powershell
 target\diag\victory.exe shaders <the shader archives>   # every shader translated, minutes
 target\diag\victory.exe warm --used                     # pipelines earlier runs drew with, for a new driver or build
 ```
+
+`shaders` is the step that helps before a first run; `warm` needs an earlier run
+on the same driver to have pipelines to make, so on a fresh cache it reports
+`0 pipelines known` and does nothing (it still creates the cache's `pipelines`
+folder).
 
 Commands, debugging switches and upstream's own description:
 [docs/README-fxceless.md](docs/README-fxceless.md). Every `VICTORY_...` switch is
