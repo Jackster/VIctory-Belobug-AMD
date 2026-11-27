@@ -26,12 +26,11 @@ pub const PROVIDER: Guid = Guid {
     data4: [0x94, 0xbe, 0xe3, 0xc9, 0xeb, 0x62, 0x34, 0x28],
 };
 
-pub const E_PENDING: HRESULT = 0x8000_000A_u32 as i32;
-pub const E_ABORT: HRESULT = 0x8000_4004_u32 as i32;
-pub const E_NOTIMPL: HRESULT = 0x8000_4001_u32 as i32;
-pub const E_INVALIDARG: HRESULT = 0x8007_0057_u32 as i32;
-pub const E_NOT_SUFFICIENT_BUFFER: HRESULT = 0x8007_007A_u32 as i32;
-pub const E_ILLEGAL_METHOD_CALL: HRESULT = 0x8000_000E_u32 as i32;
+// The one definition of each result lives in `crate::hresult`; this path
+// stays because the other modules reach these through `xasync::E_*`.
+pub(crate) use crate::hresult::{
+    E_ABORT, E_ILLEGAL_METHOD_CALL, E_INVALIDARG, E_NOT_SUFFICIENT_BUFFER, E_NOTIMPL, E_PENDING,
+};
 
 const WORK: u32 = 0;
 const COMPLETION: u32 = 1;

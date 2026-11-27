@@ -19,10 +19,9 @@ use windows_sys::Win32::System::Threading::{CreateEventW, SetEvent};
 
 use super::xasync::E_INVALIDARG;
 use super::xgameruntime::{HRESULT, S_OK};
+use crate::hresult::{E_NOTIMPL, E_OUTOFMEMORY};
 use crate::{HleModule, hle_export};
 
-const E_NOTIMPL: HRESULT = 0x8000_4001_u32 as i32;
-const E_OUTOFMEMORY: HRESULT = 0x8007_000E_u32 as i32;
 const QUEUE_FULL: HRESULT = 0x8AC8_1000_u32 as i32;
 /// No result yet, which titles poll for.
 pub(crate) const PENDING_RESULTS: HRESULT = 0x8AC8_1001_u32 as i32;

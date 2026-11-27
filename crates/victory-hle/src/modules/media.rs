@@ -13,10 +13,9 @@ use std::sync::{Mutex, OnceLock};
 
 use super::files;
 use super::xgameruntime::{HRESULT, S_OK};
+use crate::hresult::{E_NOINTERFACE, E_POINTER};
 use crate::{HleModule, hle_export};
 
-const E_NOINTERFACE: HRESULT = 0x8000_4002_u32 as i32;
-const E_POINTER: HRESULT = 0x8000_4003_u32 as i32;
 /// What Media Foundation answers for a URL scheme it has no handler for.
 const UNSUPPORTED_SCHEME: HRESULT = 0xC00D_36C3_u32 as i32;
 

@@ -12,6 +12,7 @@ use super::xgameruntime::{
     Guid, HRESULT, Interface, Methods, NOT_SUPPORTED, Object, S_OK, add_ref, missing, put,
     put_string,
 };
+use crate::hresult::E_FAIL;
 use crate::runtime;
 
 pub const PROVIDER: Guid = Guid::new(
@@ -38,8 +39,6 @@ pub const IID_2026: Guid = Guid::new(
 
 pub static OBJECT: Object = Object::new("persistent local storage", &VTABLE);
 pub const INTERFACES: &[Interface] = &[(PROVIDER, IID, &OBJECT), (PROVIDER, IID_2026, &OBJECT)];
-
-const E_FAIL: HRESULT = 0x8000_4005_u32 as i32;
 
 type This = *const Object;
 

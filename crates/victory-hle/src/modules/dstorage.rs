@@ -33,6 +33,7 @@ use victory_formats::bcpack::{self, Tables};
 
 use super::xasync::{E_INVALIDARG, E_NOTIMPL, E_PENDING};
 use super::xgameruntime::{Guid, HRESULT, Methods, Object, S_OK, add_ref, missing, put};
+use crate::hresult::{E_NOINTERFACE, E_OUTOFMEMORY};
 use crate::{HleModule, hle_export};
 
 /// The factory interface the title asks for.
@@ -42,8 +43,6 @@ const FACTORY: Guid = Guid::new(
     0x4884,
     [0xa0, 0xa3, 0xf7, 0x86, 0x2e, 0xa2, 0x43, 0xae],
 );
-const E_NOINTERFACE: HRESULT = 0x8000_4002_u32 as i32;
-const E_OUTOFMEMORY: HRESULT = 0x8007_000E_u32 as i32;
 /// `HRESULT_FROM_WIN32(ERROR_HANDLE_EOF)`: the source ends early.
 const END_OF_FILE: HRESULT = 0x8007_0026_u32 as i32;
 /// `HRESULT_FROM_WIN32(ERROR_INVALID_DATA)`: a bad compressed stream.
