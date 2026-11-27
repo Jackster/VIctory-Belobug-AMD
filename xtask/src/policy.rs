@@ -10,7 +10,8 @@ use std::process::Command;
 
 use anyhow::{Context, Result, bail};
 
-// (The translator's one file is 570 KiB of source.)
+// (The translator's one file is 602 KiB of source: about 38 KiB under the
+// 640 KiB cap.)
 const MAX_FILE_SIZE: usize = 640 * 1024;
 const MAX_ENCODED_RUN: usize = 512;
 

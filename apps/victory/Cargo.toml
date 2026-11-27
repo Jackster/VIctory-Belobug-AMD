@@ -1,6 +1,6 @@
 [package]
 name = "victory"
-description = "Command-line front end: inspect, census, convert, run."
+description = "Command-line front end: inspect, census, translate, run."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

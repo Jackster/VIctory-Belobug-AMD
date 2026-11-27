@@ -70,7 +70,7 @@ with the presented one.
 | `--no-merge` | copies of what the CPU wrote also overwrite the card's own results (below) |
 | `--skip-shader <text>` | leaves out what runs pipelines with the text in their name or DXIL hash (repeatable) |
 | `--shaders <folder>` | takes shaders from the folder where it has them: `<hash>.dxil`, by the hash the runtime names the title's shader by (a pass of ours: its own DXIL hash); with `--compare --shaders-b <folder>` a second set, turn by turn with the first |
-| `--retranslate <folder>` | only writes that folder: the capture's shaders translated by this build with the `VICTORY_*` switches of this run (`--view-limit`, `--raw-views`: the view heap's null slot and where raw views start, as the capture's shaders have them) |
+| `--retranslate <folder>` | only writes that folder: the capture's shaders translated by this build for a 64-lane RDNA host (`--view-limit`, `--raw-views`: the view heap's null slot and where raw views start, as the capture's shaders have them) |
 | `--no-restore` | leaves what a loop changed, and makes no copies to restore from (of a capture that does not fit in the card's memory with them) |
 | `--pace <ms>` | a wait after each submission sent: the card stands idle between them, as in a game that prepares the next one |
 | `--awake` | keeps the card's clocks up (`VICTORY_CARD_AWAKE=1`) |
@@ -93,7 +93,7 @@ targets (where the viewport has the picture's shape), dispatches and draws with
 the textures of the picture's shape shaders may write at that time, copies,
 resolves and clears. `--of` is the size of the picture the point was read from
 (a screenshot's). The commands are numbered `<list>:<command>` as in
-`--listing`, `--slots` and `--looks`.
+`--listing` and `--slots`.
 
 | switch | does |
 |---|---|

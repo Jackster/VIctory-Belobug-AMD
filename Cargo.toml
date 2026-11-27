@@ -50,8 +50,8 @@ unused_must_use = "deny"
 
 [workspace.lints.clippy]
 all = { level = "warn", priority = -1 }
-# This fork: two style lints are let through until the newer code is tidied
-# (tuple-heavy signatures and indexed loops in the translator and GPU side).
+# This fork: eight style lints are let through until the newer translator and
+# GPU code is tidied (tuple-heavy signatures, indexed loops, a few idioms).
 type_complexity = "allow"
 needless_range_loop = "allow"
 chunks_exact_to_as_chunks = "allow"

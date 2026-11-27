@@ -203,7 +203,7 @@ pub(crate) struct Replay {
     #[arg(long)]
     shaders_b: Option<PathBuf>,
     /// Only translate the capture's shaders, into this folder (for --shaders),
-    /// with the translator's settings of this run. Containers are looked up in
+    /// for a 64-lane RDNA host. Containers are looked up in
     /// `containers` beside the capture, and first collected there from the
     /// title's files.
     #[arg(long)]
