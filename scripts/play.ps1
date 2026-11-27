@@ -36,15 +36,33 @@ if (-not (Test-Path $victory)) { Write-Host "No $victory. Build it first (README
 if (-not (Test-Path $Exe)) { Write-Host "No $Exe."; exit 1 }
 # (Other settings left over in this window go; where your files are stays.)
 $paths = 'VICTORY_CONFIG', 'VICTORY_GAME_DIR', 'VICTORY_CACHE_DIR', 'VICTORY_DATA_DIR', 'VICTORY_FIDELITYFX_DIR'
-$inherited = @(Get-ChildItem Env:VICTORY_* | Where-Object { $_.Name -notin $paths })
-foreach ($entry in $inherited) { Remove-Item "Env:$($entry.Name)" }
+# Snapshot name and value before removing anything: afterwards the environment no longer says what
+# was inherited, so "removed and not set by this script" could not be told from "set by it".
+$inherited = @{}
+foreach ($entry in @(Get-ChildItem Env:VICTORY_* | Where-Object { $_.Name -notin $paths })) {
+    $inherited[$entry.Name] = $entry.Value
+}
+foreach ($name in @($inherited.Keys)) { Remove-Item "Env:$name" }
 foreach ($k in $settings.Keys) { Set-Item "Env:$k" $settings[$k] }
-$discarded = $inherited | Where-Object {
-    $_.Name -notin $More.Keys -and -not $_.Value.Equals([Environment]::GetEnvironmentVariable($_.Name))
-} | Sort-Object Name
+# The message's words are the spec: a value is discarded when it was removed and this script does
+# not set the name again. A name set to the same value is already what the user asked for; a name
+# this script sets to another value was replaced, not discarded, so it gets a sentence of its own.
+# Names passed via -More are applied rather than lost, so they are never reported either way.
+$discarded = @($inherited.Keys | Where-Object { -not $settings.ContainsKey($_) } | Sort-Object)
+$overridden = @($inherited.Keys | Where-Object {
+    $settings.ContainsKey($_) -and $_ -notin $More.Keys -and ([string]$settings[$_]) -cne $inherited[$_]
+} | Sort-Object)
 if ($discarded) {
-    Write-Host "Discarded inherited values for $($discarded.Name -join ', '). Use -More to pass them explicitly."
+    Write-Host "Discarded inherited values for $($discarded -join ', '). Use -More to pass them explicitly."
+}
+if ($overridden) {
+    Write-Host "Overrode inherited values for $($overridden -join ', ') with this script's settings. Use -More to pass yours explicitly."
 }
 $Exe = (Resolve-Path $Exe).Path
 Push-Location (Join-Path $PSScriptRoot '..')   # victory.toml is looked for here
-try { & $victory run $Exe --execute } finally { Pop-Location }
+$code = 1   # a failure that never reaches the child's code is still a failure
+try {
+    & $victory run $Exe --execute
+    $code = $LASTEXITCODE   # taken here, before Pop-Location: a lost code cannot be recovered
+} finally { Pop-Location }
+exit $code
