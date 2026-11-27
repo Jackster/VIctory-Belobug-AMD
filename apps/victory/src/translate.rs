@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use victory_shader::emit::host::{self, Host};
 use victory_shader::emit::{self, validator::Validator};
 use victory_shader::structure::{self, Atom, LaneExit};
@@ -170,7 +170,8 @@ pub fn warm(paths: Vec<PathBuf>, file: &Path, jobs: Option<usize>, wave: Option<
     let all = file.as_os_str() == "all";
     let mut wanted: HashSet<String> = HashSet::new();
     if !all {
-        let text = std::fs::read_to_string(file)?;
+        let text =
+            std::fs::read_to_string(file).with_context(|| format!("reading {}", file.display()))?;
         for line in text.lines() {
             for word in line.split(|c: char| !c.is_ascii_hexdigit()) {
                 if word.len() == 16 {
